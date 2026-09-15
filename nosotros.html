@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Acerca de nosotros · KROMA</title>
+<meta name="description" content="Conoce al equipo detrás de KROMA y nuestra misión de conectar empresas de belleza con toda Bolivia.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ============== HEADER ============== -->
+<header class="site-header">
+  <nav class="nav">
+    <a href="index.html" class="logo"><img src="assets/img/logo.jpg" alt="Logo KROMA" class="sello-img"> KROMA</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="nosotros.html">Acerca de nosotros</a></li>
+      <li><a href="empresas.html">Empresas</a></li>
+      <li><a href="contacto.html">Contáctanos</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Abrir menú">☰</button>
+  </nav>
+</header>
+
+<!-- ============== INTRO ============== -->
+<section class="hero" style="padding-bottom:20px;">
+  <div class="contenedor section-titulo" style="max-width:720px;">
+    <span class="eyebrow">Quiénes somos</span>
+    <h1 style="font-size:clamp(2rem,4vw,2.8rem); margin-top:12px;">Un equipo boliviano promocionando <em style="font-style:italic;color:var(--terracota);">belleza sin fronteras</em>.</h1>
+    <p style="margin-top:14px;color:#5a4a3a;">Tu punto de encuentro digital con las mejores marcas de belleza y moda, nacionales e internacionales, en el eje central de Bolivia.</p>
+  </div>
+</section>
+
+<!-- ============== MISION Y VISION ============== -->
+<section style="padding-top:20px;">
+  <div class="contenedor">
+    <div class="mv-columnas">
+      <div class="mv-tarjeta">
+        <span class="eyebrow">Nuestra misión</span>
+        <p>"Conectar a las personas con las mejores marcas de moda y belleza a través de una plataforma digital inteligente y centralizada. Facilitamos el descubrimiento de tendencias, catálogos, precios y ubicaciones para brindar una experiencia de compra ágil, transparente y accesible para todos."</p>
+      </div>
+      <div class="mv-tarjeta terracota">
+        <span class="eyebrow"> Nuestra visión</span>
+        <p>"Ser el ecosistema digital líder a nivel global en el sector de la moda y la belleza, transformando la manera en que el mundo descubre y adquiere su estilo personal. Impulsamos el crecimiento de marcas de todos los tamaños mediante la innovación tecnológica y un servicio excepcional."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== HISTORIA ============== -->
+<section class="section-alt">
+  <div class="contenedor">
+    <div class="section-titulo">
+      <span class="eyebrow">Nuestro camino</span>
+      <h2>Cómo empezamos</h2>
+    </div>
+    <div class="linea-tiempo">
+      <div class="hito">
+        <span class="anio">MARZO 2026</span>
+        <div><h4>El nacimiento de la idea</h4><p>Cinco amigos desde La Paz identificamos un gran vacío: las pequeñas marcas de belleza independientes no tenían un espacio digital centralizado para mostrarse y conectar con sus clientes.</p></div>
+      </div>
+      <div class="hito">
+        <span class="anio">MAYO 2026</span>
+        <div><h4>Primeras alianzas estratégicas</h4><p>Dimos el gran salto al sumar a las primeras marcas y tiendas nacionales de La Paz y Cochabamba a nuestra plataforma, validando nuestro propósito.</p></div>
+      </div>
+      <div class="hito">
+        <span class="anio">JULIO 2026</span>
+        <div><h4>Potenciamos la plataforma en todo el país</h4><p>Pusimos en marcha una masiva campaña de promoción multicanal para visibilizar a todas las empresas aliadas y lanzamos encuestas estratégicas en redes para conocer de primera mano los gustos de los usuarios en cada departamento, integrando además a las primeras marcas extranjeras.</p></div>
+      </div>
+      <div class="hito">
+        <span class="anio">HOY</span>
+        <div><h4>Un ecosistema en constante crecimiento</h4><p>Ya somos 24 empresas aliadas y seguimos sumando referentes de skincare, maquillaje y moda en los tres departamentos principales del país, transformando la forma en que se descubre el talento local e internacional.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== EQUIPO ============== -->
+<section>
+  <div class="contenedor">
+    <div class="section-titulo">
+      <span class="eyebrow">Las personas detrás</span>
+      <h2>Nuestro equipo fundador</h2>
+      <p>Cinco personas bolivianas trabajando para que cada empresa tenga su espacio en KROMA.</p>
+    </div>
+    <div class="equipo-grid" id="equipo-grid"></div>
+  </div>
+</section>
+
+<!-- ============== NEWSLETTER ============== -->
+<section class="section-alt">
+  <div class="contenedor">
+    <div class="newsletter">
+      <div>
+        <span class="eyebrow" style="color:var(--verde-crema);">No te pierdas nada</span>
+        <h2>Suscríbete a las ofertas</h2>
+        <p>Te avisamos por correo apenas alguna empresa afiliada publique una promoción.</p>
+      </div>
+      <div>
+        <form class="form-suscripcion">
+          <input type="email" placeholder="tu@correo.com" required>
+          <button class="btn btn-terracota" type="submit">Suscribirme 🔔</button>
+        </form>
+        <div class="mensaje-confirm"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="footer-incluido"></footer>
+
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+<script src="js/footer.js"></script>
+<script>
+  document.getElementById("equipo-grid").innerHTML = EQUIPO.map(p => `
+    <div class="equipo-card">
+      <div class="equipo-foto"><img src="${p.foto}" alt="${p.nombre}" loading="lazy"></div>
+      <h4>${p.nombre}</h4>
+      <span>${p.cargo}</span>
+    </div>
+  `).join("");
+</script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Empresas · KROMA</title>
+<meta name="description" content="Explora empresas de skincare, maquillaje y ropa en La Paz, Cochabamba y Santa Cruz.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ============== HEADER ============== -->
+<header class="site-header">
+  <nav class="nav">
+    <a href="index.html" class="logo"><img src="assets/img/logo.jpg" alt="Logo KROMA" class="sello-img"> KROMA</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="nosotros.html">Acerca de nosotros</a></li>
+      <li><a href="empresas.html">Empresas</a></li>
+      <li><a href="contacto.html">Contáctanos</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Abrir menú">☰</button>
+  </nav>
+</header>
+
+<!-- ============== ENCABEZADO DE PÁGINA ============== -->
+<section style="padding-bottom:0;">
+  <div class="contenedor section-titulo">
+    <span class="eyebrow">Catálogo completo</span>
+    <h2>Empresas de belleza y moda</h2>
+    <p>Elige un departamento y un tipo de empresa. Haz clic en una tarjeta para ver su misión, visión, productos, reseñas y cómo visitarla o contactarla.</p>
+  </div>
+</section>
+
+<!-- ============== FILTROS ============== -->
+<section style="padding-top:0;">
+  <div class="contenedor">
+    <div class="filtros-depto">
+      <button class="filtro-btn activo" data-depto="la-paz"> La Paz</button>
+      <button class="filtro-btn" data-depto="cochabamba">Cochabamba</button>
+      <button class="filtro-btn" data-depto="santa-cruz">Santa Cruz</button>
+    </div>
+    <div class="filtros-tipo">
+      <button class="chip-btn activo" data-tipo="todas">Todas</button>
+      <button class="chip-btn" data-tipo="nacional"> Nacionales</button>
+      <button class="chip-btn" data-tipo="extranjera">Extranjeras</button>
+    </div>
+
+    <div class="empresas-grid" id="empresas-grid"></div>
+  </div>
+</section>
+
+<!-- ============== NEWSLETTER ============== -->
+<section class="section-alt">
+  <div class="contenedor">
+    <div class="newsletter">
+      <div>
+        <span class="eyebrow" style="color:var(--verde-crema);">No te pierdas nada</span>
+        <h2>Suscríbete a las ofertas</h2>
+        <p>Te avisamos por correo apenas alguna empresa afiliada publique una promoción.</p>
+      </div>
+      <div>
+        <form class="form-suscripcion">
+          <input type="email" placeholder="tu@correo.com" required>
+          <button class="btn btn-terracota" type="submit">Suscribirme </button>
+        </form>
+        <div class="mensaje-confirm"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== FOOTER ============== -->
+<footer id="footer-incluido"></footer>
+
+<!-- ============== MODAL DE EMPRESA (paso 1: misión/visión · paso 2: detalle) ============== -->
+<div class="modal-overlay" id="modal-empresa">
+  <div class="modal-caja">
+    <button class="modal-cerrar" data-cerrar-modal aria-label="Cerrar">✕</button>
+    <div id="modal-empresa-contenido"><!-- se llena por JS --></div>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+<script src="js/footer.js"></script>
+</body>
+</html>
