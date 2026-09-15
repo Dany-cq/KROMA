@@ -88,15 +88,77 @@ function inicializarCarruselDestacados() {
         <span class="empresa-tag">${d.empresa.icono} ${d.empresa.nombre}</span>
         <h4>${d.producto.nombre}</h4>
         <span class="precio">Bs. ${d.producto.precio}</span>
+        <button class="btn btn-terracota btn-sm" style="margin-top:8px;" data-agregar-destacado="${i}">🛒 Agregar</button>
       </div>
     </article>
   `).join("");
+
+  pista.querySelectorAll("[data-agregar-destacado]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const d = destacados[Number(btn.dataset.agregarDestacado)];
+      if (typeof window.agregarAlCarrito === "function") {
+        window.agregarAlCarrito({
+          id: `${d.empresa.id}__0`,
+          nombre: d.producto.nombre,
+          empresa: d.empresa.nombre,
+          precio: d.producto.precio,
+          imagen: d.producto.imagen
+        });
+      }
+    });
+  });
 
   const btnPrev = document.getElementById("destacados-prev");
   const btnNext = document.getElementById("destacados-next");
   const paso = 282;
   btnPrev && btnPrev.addEventListener("click", () => pista.scrollBy({ left: -paso * 2, behavior: "smooth" }));
   btnNext && btnNext.addEventListener("click", () => pista.scrollBy({ left: paso * 2, behavior: "smooth" }));
+}
+
+/* ==========================================================================
+   VALORACIONES — puntuación de cada empresa (reseñas base + votos guardados)
+   ========================================================================== */
+function leerValoraciones() {
+  return JSON.parse(localStorage.getItem("kroma_valoraciones") || "{}");
+}
+function guardarValoraciones(val) {
+  localStorage.setItem("kroma_valoraciones", JSON.stringify(val));
+}
+function leerMiValoracion() {
+  return JSON.parse(localStorage.getItem("kroma_mi_valoracion") || "{}");
+}
+function guardarMiValoracion(obj) {
+  localStorage.setItem("kroma_mi_valoracion", JSON.stringify(obj));
+}
+
+function obtenerPromedio(empresa) {
+  const base = empresa.reseñas.map(r => r.estrellas);
+  const extra = leerValoraciones()[empresa.id] || [];
+  const todas = base.concat(extra);
+  const promedio = todas.length ? todas.reduce((a, b) => a + b, 0) / todas.length : 0;
+  return { promedio, cantidad: todas.length };
+}
+
+function renderEstrellasPromedio(promedio) {
+  const llenas = Math.round(promedio);
+  return "★".repeat(llenas) + "☆".repeat(5 - llenas);
+}
+
+function votarEmpresa(empresaId, estrellas) {
+  const val = leerValoraciones();
+  if (!val[empresaId]) val[empresaId] = [];
+  const mias = leerMiValoracion();
+
+  // Si ya había votado antes, reemplaza su voto anterior en vez de sumarlo dos veces
+  if (mias[empresaId] != null) {
+    const idx = val[empresaId].indexOf(mias[empresaId]);
+    if (idx !== -1) val[empresaId].splice(idx, 1);
+  }
+  val[empresaId].push(estrellas);
+  guardarValoraciones(val);
+
+  mias[empresaId] = estrellas;
+  guardarMiValoracion(mias);
 }
 
 /* ==========================================================================
@@ -154,7 +216,9 @@ function renderEmpresas() {
     return;
   }
 
-  grid.innerHTML = lista.map(emp => `
+  grid.innerHTML = lista.map(emp => {
+    const { promedio, cantidad } = obtenerPromedio(emp);
+    return `
     <button class="empresa-card" data-id="${emp.id}" data-depto="${filtroDeptoActual}">
       <div class="empresa-top">
         <div class="empresa-icono">${emp.icono}</div>
@@ -167,9 +231,14 @@ function renderEmpresas() {
         <span class="badge ${emp.tipo === 'extranjera' ? 'badge-extranjera' : 'badge-nacional'}">${emp.tipo === 'extranjera' ? 'Extranjera' : 'Nacional'}</span>
         <span class="badge badge-categoria">${emp.categoria}</span>
       </div>
+      <div class="empresa-valoracion">
+        <span class="estrellas">${renderEstrellasPromedio(promedio)}</span>
+        <span class="valoracion-num">${cantidad ? `${promedio.toFixed(1)} (${cantidad})` : "Sin votos todavía"}</span>
+      </div>
       <span class="ver-mas">Ver misión, productos y reseñas →</span>
     </button>
-  `).join("");
+  `;
+  }).join("");
 
   grid.querySelectorAll(".empresa-card").forEach(card => {
     card.addEventListener("click", () => abrirModalEmpresa(card.dataset.depto, card.dataset.id));
@@ -234,6 +303,7 @@ function renderPasoAdvertencia(empresa, depto) {
 }
 
 function renderPasoDetalle(empresa) {
+  const { promedio, cantidad } = obtenerPromedio(empresa);
   return `
     <div class="modal-panel">
       <div class="detalle-header">
@@ -241,6 +311,10 @@ function renderPasoDetalle(empresa) {
         <div>
           <h3>${empresa.nombre}</h3>
           <span class="empresa-pais">📍 ${empresa.direccion}</span>
+          <div class="empresa-valoracion" style="margin-top:6px;">
+            <span class="estrellas">${renderEstrellasPromedio(promedio)}</span>
+            <span class="valoracion-num">${cantidad ? `${promedio.toFixed(1)} (${cantidad} valoraciones)` : "Sin votos todavía"}</span>
+          </div>
         </div>
       </div>
 
@@ -263,6 +337,9 @@ function renderPasoDetalle(empresa) {
                 <h4>${p.nombre}</h4>
                 <p>${p.desc}</p>
                 <span class="precio">Bs. ${p.precio}</span>
+                <div style="margin-top:10px;">
+                  <button class="btn btn-terracota btn-sm" data-agregar-carrito="${i}">🛒 Agregar al carrito</button>
+                </div>
               </div>
             </div>
           `).join("")}
@@ -273,6 +350,14 @@ function renderPasoDetalle(empresa) {
       </div>
 
       <div class="panel-tab" data-panel="resenas">
+        <div class="valoracion-picker">
+          <span>¿Cómo calificarías a ${empresa.nombre}?</span>
+          <div class="picker-estrellas" data-picker-estrellas>
+            ${[1, 2, 3, 4, 5].map(n => `
+              <button class="picker-estrella ${n <= (leerMiValoracion()[empresa.id] || 0) ? 'seleccionada' : ''}" data-valor="${n}" aria-label="${n} estrellas">★</button>
+            `).join("")}
+          </div>
+        </div>
         ${empresa.reseñas.map(r => `
           <div class="resena">
             <div class="resena-top">
@@ -328,6 +413,44 @@ function activarLogicaDetalle(empresa) {
   contenido.querySelector("[data-prod-prev]")?.addEventListener("click", () => irASlide(productoActualIndex - 1));
   contenido.querySelector("[data-prod-next]")?.addEventListener("click", () => irASlide(productoActualIndex + 1));
   dots.forEach(d => d.addEventListener("click", () => irASlide(Number(d.dataset.dot))));
+
+  // Agregar al carrito
+  contenido.querySelectorAll("[data-agregar-carrito]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const idx = Number(btn.dataset.agregarCarrito);
+      const p = empresa.productos[idx];
+      if (typeof window.agregarAlCarrito === "function") {
+        window.agregarAlCarrito({
+          id: `${empresa.id}__${idx}`,
+          nombre: p.nombre,
+          empresa: empresa.nombre,
+          precio: p.precio,
+          imagen: p.imagen
+        });
+      }
+    });
+  });
+
+  // Valoración por estrellas
+  contenido.querySelectorAll("[data-valor]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const valor = Number(btn.dataset.valor);
+      votarEmpresa(empresa.id, valor);
+      mostrarToast("¡Gracias por tu valoración!");
+
+      contenido.querySelectorAll("[data-valor]").forEach(b => {
+        b.classList.toggle("seleccionada", Number(b.dataset.valor) <= valor);
+      });
+
+      const { promedio, cantidad } = obtenerPromedio(empresa);
+      contenido.querySelectorAll(".valoracion-num").forEach(el => {
+        el.textContent = `${promedio.toFixed(1)} (${cantidad} valoraciones)`;
+      });
+      contenido.querySelector(".detalle-header .estrellas").textContent = renderEstrellasPromedio(promedio);
+
+      renderEmpresas(); // refresca el promedio en la tarjeta de la grilla
+    });
+  });
 }
 
 /* ==========================================================================

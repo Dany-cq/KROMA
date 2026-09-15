@@ -558,6 +558,89 @@ footer{
 .toast.visible{ transform: translateY(0); }
 
 /* ==========================================================================
+   VALORACIÓN POR ESTRELLAS (empresas)
+   ========================================================================== */
+.empresa-valoracion{ display:flex; align-items:center; gap:8px; }
+.valoracion-num{ font-family:'Space Mono',monospace; font-size:.76rem; color:#7a6a5a; }
+
+.valoracion-picker{
+  background: var(--marfil); border:1px solid var(--linea); border-radius: var(--radio-sm);
+  padding:16px; margin-bottom:16px; text-align:center;
+}
+.valoracion-picker > span{ display:block; font-size:.88rem; margin-bottom:10px; color:#4a3a2c; }
+.picker-estrellas{ display:flex; gap:6px; justify-content:center; }
+.picker-estrella{
+  background:none; border:none; cursor:pointer; font-size:1.7rem; line-height:1;
+  color: var(--linea); transition: transform .15s ease, color .15s ease;
+}
+.picker-estrella:hover, .picker-estrella:hover ~ .picker-estrella{ transform: scale(1.08); }
+.picker-estrella.seleccionada{ color: var(--terracota); }
+
+/* ==========================================================================
+   CARRITO DE COMPRAS
+   ========================================================================== */
+.carrito-toggle{
+  position:relative; background:none; border:2px solid var(--cafe-oscuro); border-radius:100px;
+  width:44px; height:44px; cursor:pointer; font-size:1.15rem; color: var(--cafe-oscuro);
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.carrito-badge{
+  position:absolute; top:-6px; right:-6px; background: var(--terracota); color: var(--marfil);
+  font-family:'Space Mono',monospace; font-size:.66rem; min-width:19px; height:19px; border-radius:50%;
+  align-items:center; justify-content:center; display:none; padding:0 3px;
+}
+
+.carrito-overlay{ justify-content:flex-end; padding:0; }
+.carrito-caja{
+  background: var(--crema); width:100%; max-width:420px; height:100%;
+  display:flex; flex-direction:column; box-shadow: -20px 0 50px rgba(0,0,0,.25);
+  animation: entrarCarrito .3s ease;
+}
+@keyframes entrarCarrito{ from{ transform: translateX(100%);} to{ transform: translateX(0);} }
+.carrito-header{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:22px 24px; border-bottom:1px solid var(--linea);
+}
+.carrito-header h3{ font-size:1.3rem; }
+.carrito-header .modal-cerrar{ position:static; }
+
+.carrito-lista{ flex:1; overflow-y:auto; padding:18px 24px; }
+.carrito-vacio{ color:#7a6a5a; font-size:.9rem; text-align:center; margin-top:30px; }
+
+.carrito-item{
+  display:grid; grid-template-columns:64px 1fr auto; gap:12px; align-items:flex-start;
+  padding:14px 0; border-bottom:1px solid var(--linea);
+}
+.carrito-item img{ width:64px;height:64px; object-fit:cover; border-radius: var(--radio-sm); }
+.carrito-item-empresa{ font-size:.72rem; color:#8a7a68; }
+.carrito-item-info h4{ font-size:.92rem; margin:2px 0 4px; }
+.carrito-cant{ display:flex; align-items:center; gap:10px; margin-top:8px; }
+.carrito-cant button{
+  width:26px;height:26px; border-radius:50%; border:1.5px solid var(--linea); background:var(--marfil);
+  cursor:pointer; font-size:1rem; line-height:1;
+}
+.carrito-quitar{ background:none; border:none; color:#9a8a78; cursor:pointer; font-size:1rem; }
+.carrito-quitar:hover{ color: var(--cafe-medio); }
+
+.carrito-footer{ padding:18px 24px 24px; border-top:1px solid var(--linea); }
+.carrito-total-linea{
+  display:flex; justify-content:space-between; font-family:'Space Mono',monospace;
+  font-weight:700; font-size:1.05rem; margin-bottom:14px;
+}
+.carrito-footer .btn{ margin-bottom:10px; }
+.carrito-footer .btn:last-child{ margin-bottom:0; }
+
+@media (max-width: 620px){
+  .carrito-caja{ max-width:100%; }
+}
+
+.instalar-toggle{ flex-shrink:0; }
+@media (max-width: 880px){
+  .instalar-texto{ display:none; }
+  .instalar-toggle{ padding:9px 12px; }
+}
+
+/* ==========================================================================
    RESPONSIVE
    ========================================================================== */
 @media (max-width: 980px){
